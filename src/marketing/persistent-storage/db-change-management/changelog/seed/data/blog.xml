@@ -1,0 +1,16 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.0.xsd">
+    
+    <!-- Insert records into the TagType table -->
+    <changeSet id="insert" author="on-boarding-seed">
+        <sql>
+            <![CDATA[
+                INSERT INTO blog (id,post) VALUES ('b25bac53-c377-4150-835f-1b4ab07412ec','Gatsby le Magnifique par F. Scott Fitzgerald, 978-0-7432-7356-5, publié par Scribner, écrit en anglais, première publication le 10 avril 1925, d''environ 100 pages.');
+                INSERT INTO blog (id,post) VALUES ('d25bac53-c377-4150-835f-1b4ab07412ec','Ne tirez pas sur l''oiseau moqueur par Harper Lee, 978-0-06-112008-4, publié par HarperCollins, écrit en anglais, première publication le 11 juillet 1960, d''environ 336 pages.');
+                INSERT INTO blog (id,post) VALUES ('f25bac53-c377-4150-835f-1b4ab07412ec','Tuer un oiseau par Lee, 978-0-06-112008-4, publié par Tollins, écrit en anglais, première publication le 11 juillet 1969, d''environ 336 pages.');
+                INSERT INTO blog (id,post) VALUES ('e25bac53-c377-4150-835f-1b4ab07412ec','Faire voler une abeille par Leap, 978-0-06-112236-4, publié par Tollins écrit en français, première publication le 11 septembre 1947, d''environ 356 pages.');
+            ]]>
+        </sql>
+    </changeSet>
+</databaseChangeLog>  

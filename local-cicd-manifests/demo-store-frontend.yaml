@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: demo-store-frontend
+  namespace: local-cicd
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: demo-store-frontend
+  template:
+    metadata:
+      labels:
+        app: demo-store-frontend
+    spec:
+      containers:
+        - name: demo-store-frontend-container
+          image: demo-store-frontend:latest
+          ports:
+            - containerPort: 80
+          resources:
+            limits:
+              cpu: "100m" # 1000m = 1 CPU core
+              memory: "128Mi" # 256 megabytes, 512 megabytes, 768 megabytes, 1024 megabytes
+            requests:
+              cpu: "50m"  # 0.75 CPU cores
+              memory: "64Mi"  # 256 megabytes, 512 megabytes, 768 megabytes, 1024 megabytes
+          env:
+            - name: VUE_APP_BASE_URL
+              value: "http://localhost:8082"

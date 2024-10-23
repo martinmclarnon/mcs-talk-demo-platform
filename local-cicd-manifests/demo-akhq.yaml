@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: demo-akhq
+  namespace: local-cicd
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: demo-akhq
+  template:
+    metadata:
+      labels:
+        app: demo-akhq
+    spec:
+      containers:
+        - name: akhq-kafka-container
+          image: tchiotludo/akhq:latest # Change to the desired AKHQ version/tag
+          ports:
+            - containerPort: 8080
+          resources:
+            limits:
+              cpu: "600m"  # 0.75 CPU cores
+              memory: "512Mi"  # 256 megabytes, 512 megabytes, 768 megabytes, 1024 megabytes 
+            requests:
+              cpu: "300m" # 1000m = 1 CPU core
+              memory: "256Mi" # 256 megabytes, 512 megabytes, 768 megabytes, 1024 megabytes
+          env:
+            - name: AKHQ_CONFIGS_GLOBAL_BOOTSTRAP_SERVERS
+              value: "demo-kafka:9092" # Replace with your Kafka broker address
+            - name: AKHQ_CONFIGURATION
+              value: |
+                akhq:
+                  connections:
+                    demo-kafka-server:
+                      properties:
+                        bootstrap.servers: "demo-kafka:9092"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: demo-akhq
+  namespace: local-cicd
+spec:
+  selector:
+    app: demo-akhq
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+  type: LoadBalancer # Use NodePort, ClusterIP, or LoadBalancer based on your setup
+                

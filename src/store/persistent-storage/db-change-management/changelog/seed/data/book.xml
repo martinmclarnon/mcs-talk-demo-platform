@@ -1,0 +1,16 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.0.xsd">
+    
+    <!-- Insert records into the TagType table -->
+    <changeSet id="insert" author="on-boarding-seed">
+        <sql>
+            <![CDATA[
+                INSERT INTO book (id,title,author,isbn,publisher,language_written_in,published_date,number_of_pages,review) VALUES ('da8d5c88-5680-4c9a-9886-2ca4e680ba75','The Great Gatsby','F. Scott Fitzgerald','978-0-7432-7356-5','Scribner','emergent','1925-04-10','100','The Great Gatsby is a classic American novel that ...') ON CONFLICT (id) DO NOTHING;
+                INSERT INTO book (id,title,author,isbn,publisher,language_written_in,published_date,number_of_pages,review) VALUES ('ba8d5c88-5680-4c9a-9886-2ca4e680ba75','To Kill a Mockingbird','Harper Lee','978-0-06-112008-4','HarperCollins','emergent','1960-07-11','336','To Kill a Mockingbird is a powerful novel that confronts ...') ON CONFLICT (id) DO NOTHING;
+                INSERT INTO book (id,title,author,isbn,publisher,language_written_in,published_date,number_of_pages,review) VALUES ('fa8d5c88-5680-4c9a-9886-2ca4e680ba75','To Kill a bird','Lee','978-0-06-112008-4','Tollins','emergent','1969-07-11','336','To Kill a bird ...') ON CONFLICT (id) DO NOTHING;
+                INSERT INTO book (id,title,author,isbn,publisher,language_written_in,published_date,number_of_pages,review) VALUES ('ea8d5c88-5680-4c9a-9886-2ca4e680ba75','To fly a bee','Leap','978-0-06-112236-4','Tollins','canopy','1947-09-11','356','To be ...') ON CONFLICT (id) DO NOTHING;
+            ]]>            
+        </sql>
+    </changeSet>
+</databaseChangeLog>

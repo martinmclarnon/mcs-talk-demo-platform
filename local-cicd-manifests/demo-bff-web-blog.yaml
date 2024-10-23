@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: demo-bff-web-blog
+  namespace: local-cicd
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: demo-bff-web-blog
+  template:
+    metadata:
+      labels:
+        app: demo-bff-web-blog
+    spec:
+      containers:
+        - name: demo-bff-web-blog-container
+          image: demo-bff-web-blog:latest
+          ports:
+            - containerPort: 8080
+          resources:
+            limits:
+              cpu: "300m" # 1000m = 1 CPU core
+              memory: "256Mi" # 256 megabytes, 512 megabytes, 768 megabytes, 1024 megabytes
+            requests:
+              cpu: "150m"  # 0.75 CPU cores
+              memory: "128Mi"  # 256 megabytes, 512 megabytes, 768 megabytes, 1024 megabytes 
+          env:
+            - name: JAVA_TOOL_OPTIONS
+              value: "-Xdebug -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"
+            - name: SERVER_PORT
+              value: "8080"
+            - name: SERVER_SERVLET_CONTEXTPATH
+              value: "/q824phylj42i77kdpvrq"
+            - name: SPRING_DATASOURCE_URL
+              value: "jdbc:postgresql://demo-marketing-db:5432/marketing"
+            - name: SPRING_DATASOURCE_USERNAME
+              value: "dbusername"
+            - name: SPRING_DATASOURCE_PASSWORD
+              value: "dbpassword"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: demo-bff-web-blog
+  namespace: local-cicd
+spec:
+  selector:
+    app: demo-bff-web-blog
+  ports:
+    - protocol: TCP
+      port: 8081
+      targetPort: 8080
+  type: ClusterIP # You can use other types like NodePort or LoadBalancer if needed

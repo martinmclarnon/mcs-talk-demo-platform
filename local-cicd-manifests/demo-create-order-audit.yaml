@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: demo-create-order-audit
+  namespace: local-cicd
+spec:
+  replicas: 1 
+  selector:
+    matchLabels:
+      app: demo-create-order-audit
+  template:
+    metadata:
+      labels:
+        app: demo-create-order-audit
+    spec:
+      containers:
+        - name: demo-create-order-audit-container
+          image: demo-create-order-audit:latest 
+          ports:
+            - containerPort: 8080
+          resources:
+            limits:
+              cpu: "300m" # 1000m = 1 CPU core
+              memory: "256Mi" # 256 megabytes, 512 megabytes, 768 megabytes, 1024 megabytes
+            requests:
+              cpu: "150m"  # 0.75 CPU cores
+              memory: "128Mi"  # 256 megabytes, 512 megabytes, 768 megabytes, 1024 megabytes
+          env:
+            - name: SPRING_DATA_MONGODB_URI
+              value: "mongodb://demo-mongodb:27017"
+            - name: MONGODB_COLLECTION
+              value: "order-received-audit"
+            - name: SPRING_DATA_MONGODB_DATABASE
+              value: "demo-audit"
+            - name: SERVER_PORT
+              value: "8080"
+            - name: kafka_order_bootstrap-servers
+              value: "demo-kafka:9092"
+            - name: kafka_order_topic_create-order
+              value: "create-order"
+            - name: logging_level_root
+              value: "info"
+            - name: kafka_order_consumer_group-id_notification
+              value: "notification"

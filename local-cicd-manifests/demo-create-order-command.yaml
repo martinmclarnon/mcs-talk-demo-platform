@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: demo-create-order-command
+  namespace: local-cicd
+spec:
+  replicas: 1 
+  selector:
+    matchLabels:
+      app: demo-create-order-command
+  template:
+    metadata:
+      labels:
+        app: demo-create-order-command
+    spec:
+      containers:
+        - name: demo-create-order-command-container
+          image: demo-create-order-command:latest 
+          ports:
+            - containerPort: 8080
+          resources:
+            limits:
+              cpu: "300m" # 1000m = 1 CPU core
+              memory: "256Mi" # 256 megabytes, 512 megabytes, 768 megabytes, 1024 megabytes
+            requests:
+              cpu: "150m"  # 0.75 CPU cores
+              memory: "128Mi"  # 256 megabytes, 512 megabytes, 768 megabytes, 1024 megabytes
+          env:
+            - name: SERVER_PORT
+              value: "8080"
+            - name: SERVER_SERVLET_CONTEXTPATH
+              value: "/wy6lr1lqj4fc6nqel99s"
+            - name: kafka_order_bootstrap-servers
+              value: "demo-kafka:9092"
+            - name: kafka_order_topic_create-order
+              value: "create-order"
+            - name: logging_level_root
+              value: "info"
+            - name: auto_create_topics_enable
+              value: "true"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: demo-create-order-command
+  namespace: local-cicd
+spec:
+  selector:
+    app: demo-create-order-command
+  ports:
+    - protocol: TCP
+      port: 8084
+      targetPort: 8080 # Must match the container port in your Deployment
+  type: ClusterIP # You can use other types like NodePort or LoadBalancer if needed

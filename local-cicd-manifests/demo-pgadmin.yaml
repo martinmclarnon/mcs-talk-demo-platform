@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: demo-pgadmin
+  namespace: local-cicd
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: demo-pgadmin
+  template:
+    metadata:
+      labels:
+        app: demo-pgadmin
+    spec:
+      containers:
+        - name: demo-pgadmin-container
+          image: dpage/pgadmin4:latest
+          ports:
+            - containerPort: 80
+          resources:
+            limits:
+              cpu: "300m" # 1000m = 1 CPU core
+              memory: "512Mi" # 256 megabytes, 512 megabytes, 768 megabytes, 1024 megabytes
+            requests:
+              cpu: "250m"  # 0.75 CPU cores
+              memory: "256Mi"  # 256 megabytes, 512 megabytes, 768 megabytes, 1024 megabytes 
+          env:
+            - name: PGADMIN_DEFAULT_EMAIL
+              value: "email@example.com"
+            - name: PGADMIN_DEFAULT_PASSWORD
+              value: "pgadminpassword"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: demo-pgadmin
+  namespace: local-cicd
+spec:
+  selector:
+    app: demo-pgadmin
+  ports:
+    - protocol: TCP
+      port: 8090
+      targetPort: 80

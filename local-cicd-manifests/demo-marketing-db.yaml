@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: demo-marketing-db
+  namespace: local-cicd
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: demo-marketing-db
+  template:
+    metadata:
+      labels:
+        app: demo-marketing-db
+    spec:
+      containers:
+        - name: demo-marketing-db-container
+          image: demo-marketing-db:latest
+          ports:
+            - containerPort: 5432
+          resources:
+            limits:
+              cpu: "100m" # 1000m = 1 CPU core
+              memory: "128Mi" # 256 megabytes, 512 megabytes, 768 megabytes, 1024 megabytes
+            requests:
+              cpu: "50m"  # 0.75 CPU cores
+              memory: "64Mi"  # 256 megabytes, 512 megabytes, 768 megabytes, 1024 megabytes 
+          env:
+            - name: 'POSTGRES_DB'
+              value: 'marketing'
+            - name: 'POSTGRES_USER'
+              value: 'dbusername'
+            - name: 'POSTGRES_PASSWORD'
+              value: 'dbpassword'            
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: demo-marketing-db
+  namespace: local-cicd
+spec:
+  selector:
+    app: demo-marketing-db
+  ports:
+    - protocol: TCP
+      port: 5432
+      targetPort: 5432
